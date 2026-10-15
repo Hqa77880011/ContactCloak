@@ -1,0 +1,42 @@
+{
+  "seed": 17,
+  "device": "cpu",
+  "epochs": 100,
+  "patience": 15,
+  "batch_size": 4,
+  "learning_rate": 0.0001,
+  "weight_decay": 0.0001,
+  "hidden": 64,
+  "identities": 4,
+  "parents": [
+    -1,
+    0,
+    1
+  ],
+  "offsets": [
+    [
+      0,
+      1,
+      0
+    ],
+    [
+      0.3,
+      0,
+      0
+    ],
+    [
+      0.3,
+      0,
+      0
+    ]
+  ],
+  "projection_steps": 8,
+  "damping": 0.01,
+  "jerk_weight": 0.01,
+  "joint_limit": 3.14159,
+  "contact_tolerance": 0.02,
+  "penetration_tolerance": 0.01,
+  "smooth_weight": 0.01,
+  "privacy_weight": 0.1
+}
+

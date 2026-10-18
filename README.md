@@ -78,3 +78,15 @@ python -m contactcloak.attack --train data/attack_train.jsonl --validation data/
 The result is a newly fitted attack, separate from the generator's training adversary.
 
 Inference timing runs the deployment forward pass separately from calibration, commutation and other evaluator diagnostics, after one warmup. Batch P50/P95 and examples/s retain the configured batch size. MAC/FLOP counts cover Conv/Linear/GRU multiply-adds; process RSS includes the dataset and Python runtime.
+
+## Fixed reproduction setting
+
+Position-contact task on the registered three-joint/four-identity skeleton; CPU GRU64, seed17, 100 epochs with validation early stopping.
+
+The checked-in entry point fixes data seeds, methods, budgets and output paths. Inspect its commands without starting any computation:
+
+```bash
+python reproduce.py --plan --source data/source
+```
+
+Remove `--plan` to execute the registered pipeline in a fresh output directory. The entry point calls the existing implementation; it does not insert paper results. Installation uses the package instructions above.

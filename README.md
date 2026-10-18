@@ -58,7 +58,7 @@ Identity Top-1, mean/P95 contact error in cm, episode task success, valid-frame/
 
 ## Implementation conventions
 
-Projection uses fixed damped Gauss-Newton iterations with differentiable kinematics. The supported geometry is a joint hierarchy with a ground-plane nonpenetration check and contact positions; object-specific orientation and mesh collision require additional constraints in the scene model. Training alternates the attacker and generator after projection. Failure never restores raw pose. The default three-joint skeleton is a directly runnable model configuration, to be replaced by the exported GRAB hierarchy.
+Projection uses fixed damped Gauss-Newton iterations with differentiable kinematics. The supported geometry is a joint hierarchy with a ground-plane nonpenetration check and contact positions; object-specific orientation and mesh collision require additional constraints in the scene model. Training alternates the attacker and generator after projection. Failure never restores raw pose. The default three-joint skeleton is a directly runnable model configuration, with the finite session generator below; exported GRAB hierarchies can be configured separately.
 
 
 ## Independent motion attacker
@@ -81,12 +81,11 @@ Inference timing runs the deployment forward pass separately from calibration, c
 
 ## Fixed reproduction setting
 
-Position-contact task on the registered three-joint/four-identity skeleton; CPU GRU64, seed17, 100 epochs with validation early stopping.
-
-The checked-in entry point fixes data seeds, methods, budgets and output paths. Inspect its commands without starting any computation:
+The default input contains 24 articulated sessions: four continuous motion styles, six independent sessions per subject, 16 frames per session and the registered three-joint skeleton. Exact forward kinematics plus independent position noise supplies observed contact anchors. The same four subjects appear in every role, but sessions are disjoint (three train / one validation / two test per subject); public pseudobody seeds are independent random draws.
 
 ```bash
-python reproduce.py --plan --source data/source
+python reproduce.py --plan
+python reproduce.py --output runs/finite-setting
 ```
 
-Remove `--plan` to execute the registered pipeline in a fresh output directory. The entry point calls the existing implementation; it does not insert paper results. Installation uses the package instructions above.
+The entry point generates `source.npz` with `finite_data.py --output runs/finite-setting/source.npz --seed 17`, calls the existing prepare command and uses `configs/finite.json` (CPU GRU32, at most 20 epochs, patience 5, four projection steps). It compares projected ContactCloak with raw poses and fits the independent attacker using the existing exported remote-view protocol. Identity labels supervise training/scoring; pose and contact inputs contain observed motion. Optional `--source raw.npz` accepts exported sessions with the same skeleton.
